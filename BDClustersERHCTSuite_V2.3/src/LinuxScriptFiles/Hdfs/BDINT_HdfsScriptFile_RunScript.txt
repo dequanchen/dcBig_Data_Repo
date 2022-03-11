@@ -1,0 +1,7 @@
+sudo su - hdfs <<HERE
+cd /home/hdfs;
+echo -ne "'Current pwd' is: ";
+pwd;
+./dcTestHive_SqoopImportHiveExternalTableScriptFile_No7.sh;
+sleep 1;
+HERE

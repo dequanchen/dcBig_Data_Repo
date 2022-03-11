@@ -1,0 +1,10 @@
+mkdir -p /home/hdfs;
+chmod -R 777 /home/hdfs;
+chown -R hdfs:users /home/hdfs;
+mkdir -p /data/tmp;
+chmod -R 777 /data/tmp;
+chown -R hdfs:users /data/tmp;
+
+chmod -R 750 /home/hdfs;
+chmod -R 750 /data/tmp;
+

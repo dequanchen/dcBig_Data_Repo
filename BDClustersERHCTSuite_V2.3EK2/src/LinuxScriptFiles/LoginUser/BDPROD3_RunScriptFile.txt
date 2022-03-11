@@ -1,0 +1,5 @@
+cd /data/home/wa00336/test/;
+echo -ne "'Current pwd' is: ";
+pwd;
+./dcMCHadoop_HDFSFolder_CopyingToDestCluster_TempScriptFile.sh;
+sleep 1;

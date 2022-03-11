@@ -1,0 +1,4 @@
+sudo su - hdfs <<HERE
+hadoop fs -copyFromLocal /home/hdfs/dcHHPTestData_employee.txt /apps/hive/warehouse/dcHHPTestData_employee2.txt;
+sleep 1;
+HERE

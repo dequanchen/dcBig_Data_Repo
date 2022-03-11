@@ -1,0 +1,7 @@
+sudo su - m041785<<HERE
+cd /data/home//;
+echo -ne "'Current pwd' is: ";
+pwd;
+./dcTempScript2.sh;
+sleep 40;
+HERE

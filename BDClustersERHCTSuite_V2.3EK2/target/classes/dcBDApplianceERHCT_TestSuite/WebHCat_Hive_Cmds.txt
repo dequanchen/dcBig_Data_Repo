@@ -1,0 +1,287 @@
+
+1. data for employee Hive table
+cd /data/home/wa00336/test;
+cat dcFSETestData.txt
+	wa00336@hdpr05en01:~/test> cat dcFSETestData.txt
+	101,Joe,User,90000,M,Texas
+	102,Sam,Smith,125000,M,Ohio
+	103,Ann,Richards,55000,F,Texas
+	104,Brian,Williams,120000,M,NewYork
+	105,Jim,Kirk,45500,M,Florida
+	106,Mary,Mac,250000,F,Virginiawa0
+
+ls -la | grep dcFSETestData.txt;
+	wa00336@hdpr05en01:~/test> ls -la | grep dcFSETestData.txt;
+	-rwxrwxrwx 1 wa00336 users      186 Sep 13 20:06 dcFSETestData.txt
+
+
+2. Create the HDFS file - /user/wa00336/employee_knox_hive_ambarialert.txt using the above-created local data file
+cd /data/home/wa00336/test;
+echo "bnhgui89" | kinit wa00336;
+hdfs dfs -mkdir -p /user/wa00336/test/Knox;
+
+hdfs dfs -copyFromLocal /data/home/wa00336/test/dcFSETestData.txt /user/wa00336/test/Knox/employee_knox_webhcat.txt;
+hdfs dfs -cat /user/wa00336/test/Knox/employee_knox_webhcat.txt;
+
+or
+
+curl -k -u wa00336:bnhgui89 --location-trusted -X PUT -L "$hadoopClusterF5ConnStr/webhdfs/v1/user/wa00336/test/Knox/employee_knox_webhcat.txt?op=CREATE&overwrite=true" -T /data/home/wa00336/test/dcFSETestData.txt;
+curl -k -u wa00336:bnhgui89 --location-trusted  -X GET -L $hadoopClusterF5ConnStr/webhdfs/v1/user/wa00336/test/Knox/employee_knox_webhcat.txt?op=OPEN;
+
+or 
+
+kinit wa00336;
+curl -k --negotiate -u : --location-trusted -X PUT -L "http://hdpr05mn01.mayo.edu:50070/webhdfs/v1/user/wa00336/test/Knox/employee_knox_webhcat.txt?op=CREATE&overwrite=true" -T /data/home/wa00336/test/dcFSETestData.txt;
+curl -k --negotiate -u : --location-trusted  -X GET -L http://hdpr05mn01.mayo.edu:50070/webhdfs/v1/user/wa00336/test/Knox/employee_knox_webhcat.txt?op=OPEN;
+
+
+3. Delete existiing hive table
+curl -i -k -u wa00336:bnhgui89 --location-trusted -X DELETE -L $hadoopClusterF5ConnStr/webhdfs/v1/user/wa00336/employee_knox_hive_ambarialert.txt?op=DELETE;
+
+or 
+
+kinit wa00336;
+curl -k --negotiate -u : --location-trusted -X DELETE -L http://hdpr05mn01.mayo.edu:50111/templeton/v1/ddl/database/default/table/employee_webhcat;
+
+
+4. Create the Hive table - [default.] employee_knox_hive_ambarialert and verification
+curl -i -k -u wa00336:bnhgui89 --location-trusted -X PUT -L -HContent-type:application/json -d  \
+'{ "comment":"Knox-Gated Hive JDBC Testing Hive Table", "columns": [{ "name": "employeeid", "type": "int" },{ "name": "firstName", "type": "string" }, { "name": "lastName", "type": "string" }, { "name": "salary", "type": "int" }, { "name": "gender", "type": "string" }, { "name": "state", "type": "string" }], "format": { "storedAs": "textfile", "rowFormat": {"fieldsTerminatedBy": "," }} }' \
+$hadoopClusterF5ConnStr/templeton/v1/ddl/database/default/table/employee_webhcat && sleep 15;
+curl -i -k -u wa00336:bnhgui89 --location-trusted -X GET -L $hadoopClusterF5ConnStr/templeton/v1/ddl/database/default/table/employee_webhcat;
+
+or
+
+kinit wa00336;
+curl -i -k --negotiate -u : --location-trusted -X PUT -L -HContent-type:application/json -d  \
+'{ "comment":"Knox-Gated Hive JDBC Testing Hive Table", "columns": [{ "name": "employeeid", "type": "int" },{ "name": "firstName", "type": "string" }, { "name": "lastName", "type": "string" }, { "name": "salary", "type": "int" }, { "name": "gender", "type": "string" }, { "name": "state", "type": "string" }], "format": { "storedAs": "textfile", "rowFormat": {"fieldsTerminatedBy": "," }} }' \
+http://hdpr05mn01.mayo.edu:50111/templeton/v1/ddl/database/default/table/employee_webhcat && sleep 15;
+curl -i -k --negotiate -u : --location-trusted -X GET -L http://hdpr05mn01.mayo.edu:50111/templeton/v1/ddl/database/default/table/employee_webhcat;
+
+
+4. Load test data into the Hive table 
+curl -i -k -u wa00336:bnhgui89 --location-trusted -X POST -d execute="load data inpath '/user/wa00336/test/Knox/employee_knox_webhcat.txt' overwrite into table default.employee_webhcat;" \
+-d statusdir="/user/wa00336/test/Knox/employee_webhcat_creation.output" \
+-L $hadoopClusterF5ConnStr/templeton/v1/hive && sleep 60;
+curl -k -u wa00336:bnhgui89 --location-trusted  -X GET -L $hadoopClusterF5ConnStr/webhdfs/v1/user/wa00336/test/Knox/employee_webhcat_creation.output/exit?op=OPEN;	
+#curl -k -u wa00336:bnhgui89 --location-trusted  -X GET -L $hadoopClusterF5ConnStr/webhdfs/v1/user/wa00336/test/Knox/employee_webhcat_creation.output/stdout?op=OPEN;
+#curl -k -u wa00336:bnhgui89 --location-trusted  -X GET -L $hadoopClusterF5ConnStr/webhdfs/v1/user/wa00336/test/Knox/employee_webhcat_creation.output/stderr?op=OPEN;
+curl -i -k -u wa00336:bnhgui89 --location-trusted -X DELETE -L "$hadoopClusterF5ConnStr/webhdfs/v1/user/wa00336/test/Knox/employee_knox_hive_ambarialert_creation.output?op=DELETE&recursive=true";
+
+or 
+
+kinit wa00336;
+curl -i -k --negotiate -u : --location-trusted -X POST -d execute="load data inpath '/user/wa00336/test/Knox/employee_knox_webhcat.txt' overwrite into table default.employee_webhcat;" \
+-d statusdir="/user/wa00336/test/Knox/employee_webhcat_creation.output" \
+-L http://hdpr05mn01.mayo.edu:50111/templeton/v1/hive && sleep 60;
+curl -k --negotiate -u : --location-trusted  -X GET -L http://hdpr05mn01.mayo.edu:50070/webhdfs/v1/user/wa00336/test/Knox/employee_webhcat_creation.output/exit?op=OPEN;
+#curl -k --negotiate -u : --location-trusted  -X GET -L http://hdpr05mn01.mayo.edu:50070/webhdfs/v1/user/wa00336/test/Knox/employee_webhcat_creation.output/stdout?op=OPEN;
+#curl -k --negotiate -u : --location-trusted  -X GET -L http://hdpr05mn01.mayo.edu:50070/webhdfs/v1/user/wa00336/test/Knox/employee_webhcat_creation.output/stderr?op=OPEN;
+curl -k --negotiate -u : --location-trusted -X DELETE -L http://hdpr05mn01.mayo.edu:50070/webhdfs/v1/user/wa00336/test/Knox/employee_knox_hive_ambarialert_creation.output?op=DELETE&recursive=true";
+
+
+5. Query Hive Table Data:
+curl -i -k --negotiate -u : --location-trusted -X POST -d execute="select * from default.employee_webhcat where employeeid%3D104;" \
+-d statusdir="/user/wa00336/test/Knox/employee_webhcat_query.output" \
+-L http://hdpr05mn01.mayo.edu:50111/templeton/v1/hive && sleep 45;
+curl -k -u wa00336:bnhgui89 --location-trusted  -X GET -L $hadoopClusterF5ConnStr/webhdfs/v1/user/wa00336/test/Knox/employee_webhcat_query.output/stdout?op=OPEN; 
+
+or 
+
+kinit wa00336;
+curl -i -k --negotiate -u : --location-trusted -X POST -d execute="select * from default.employee_webhcat where employeeid%3D104;" \
+-d statusdir="/user/wa00336/test/Knox/employee_webhcat_query.output" \
+-L http://hdpr05mn01.mayo.edu:50111/templeton/v1/hive && sleep 45;
+curl -k -u wa00336:bnhgui89 --location-trusted  -X GET -L $hadoopClusterF5ConnStr/webhdfs/v1/user/wa00336/test/Knox/employee_webhcat_query.output/stdout?op=OPEN; 
+
+------------------------------------------------
+kinit;
+beeline -u 'jdbc:hive2://hdpr03mn01.mayo.edu:10001/;transportMode=http;httpPath=cliservice;principal=hive/_HOST@MFAD.MFROOT.ORG' -e "select * from default.employee1;";
+
+beeline -u 'jdbc:hive2://hdpr03mn01.mayo.edu:10001/;transportMode=http;httpPath=cliservice;principal=hive/_HOST@MFAD.MFROOT.ORG' -e "select count(*) from default.employee1;";
+	...6
+===========>	
+beeline --silent=true --showWarnings=false -u  'jdbc:hive2://hdpr03mn01.mayo.edu:10001/;transportMode=http;httpPath=cliservice;principal=hive/_HOST@MFAD.MFROOT.ORG' -e "select count(*) from default.employee1;" | grep -v "WARNING\|+-\|database_name" | sed -e 's/\s*//g' -e 's/|//g' > dcTemp.txt;
+cat dcTemp.txt;
+
+beeline -u 'jdbc:hive2://hdpr03mn01.mayo.edu:10001/;transportMode=http;httpPath=cliservice;principal=hive/_HOST@MFAD.MFROOT.ORG' -e "drop table if exists default.employee1;";
+beeline -u 'jdbc:hive2://hdpr03mn01.mayo.edu:10001/;transportMode=http;httpPath=cliservice;principal=hive/_HOST@MFAD.MFROOT.ORG' -e "import table default.employee1 from '/user/wa00336/hive_table_exporting/employee1';";
+
+
+beeline -u 'jdbc:hive2://hdpr05mn01.mayo.edu:10001/;transportMode=http;httpPath=cliservice;principal=hive/_HOST@MFAD.MFROOT.ORG' -e "drop table if exists default.employee1;";
+beeline -u 'jdbc:hive2://hdpr05mn01.mayo.edu:10001/;transportMode=http;httpPath=cliservice;principal=hive/_HOST@MFAD.MFROOT.ORG' -e "import table default.employee1 from '/user/wa00336/hive_table_exporting/employee1';";
+
+beeline -u 'jdbc:hive2://hdpr05mn01.mayo.edu:10001/;transportMode=http;httpPath=cliservice;principal=hive/_HOST@MFAD.MFROOT.ORG' -e "select * from default.employee1;";
+
+beeline -u 'jdbc:hive2://hdpr05mn01.mayo.edu:10001/;transportMode=http;httpPath=cliservice;principal=hive/_HOST@MFAD.MFROOT.ORG' -e "select count(*) from default.employee1;";
+
+
+
+
+
+
+
+appendix
+-------------
+1. Hive Table DDL Info
+curl -i -k -u wa00336:bnhgui89 --location-trusted -X GET -L https://bigdata.mayo.edu/hdp/DEV3/knox/templeton/v1/ddl/database/default/table/employee_knox_hive_ambarialert;
+
+-----
+
+kinit wa00336;
+curl -i -k --negotiate -u : --location-trusted -L http://hdpr05mn01.mayo.edu:50111/templeton/v1/ddl/database/default/table/employee_knox_hive_ambarialert;
+
+beeline -u 'jdbc:hive2://hdpr05mn01.mayo.edu:10001/;transportMode=http;httpPath=cliservice;principal=hive/_HOST@MFAD.MFROOT.ORG' -e "describe default.employee_knox_hive_ambarialert;";
+##/usr/bin/beeline 'jdbc:hive2://hdpr05mn01.mayo.edu:10001/;transportMode=http;httpPath=cliservice;principal=hive/_HOST@MFAD.MFROOT.ORG' -e "describe default.employee_knox_hive_ambarialert;";
+
+
+2. Delete & Create & Insert Data into Hive Table
+
+echo "101,Joe,Smith" > ~/employeeHiveData.txt;
+
+cat ~/employeeHiveData.txt;
+ls -la | grep employeeHiveData.txt;
+
+curl -i -k -u wa00336:bnhgui89 --location-trusted -X DELETE -L $hadoopClusterF5ConnStr/webhdfs/v1/user/wa00336/employee_knox_hive_ambarialert.txt?op=DELETE;
+curl -k -u wa00336:bnhgui89 --location-trusted -X PUT -L "$hadoopClusterF5ConnStr/webhdfs/v1/user/wa00336/employee_knox_hive_ambarialert.txt?op=CREATE&overwrite=true" -T ~/employeeHiveData.txt;
+curl -k -u wa00336:bnhgui89 --location-trusted  -X GET -L $hadoopClusterF5ConnStr/webhdfs/v1/user/wa00336/employee_knox_hive_ambarialert.txt?op=OPEN;
+
+curl -i -k -u wa00336:bnhgui89 --location-trusted -X DELETE -L $hadoopClusterF5ConnStr/templeton/v1/ddl/database/default/table/employee_knox_hive_ambarialert;
+
+curl -i -k -u wa00336:bnhgui89 --location-trusted -X PUT -L -HContent-type:application/json -d  \
+'{ "comment":"Knox-Gated Hive JDBC Testing Hive Table", "columns": [{ "name": "employeeid", "type": "int" },{ "name": "firstName", "type": "string" }, { "name": "lastName", "type": "string" }], "format": { "storedAs": "textfile", "rowFormat": {"fieldsTerminatedBy": "," }} }' \
+$hadoopClusterF5ConnStr/templeton/v1/ddl/database/default/table/employee_knox_hive_ambarialert && sleep 15;
+curl -i -k -u wa00336:bnhgui89 --location-trusted -X GET -L $hadoopClusterF5ConnStr/templeton/v1/ddl/database/default/table/employee_knox_hive_ambarialert;
+
+curl -i -k -u wa00336:bnhgui89 --location-trusted -X POST -d execute="load data inpath '/user/wa00336/employee_knox_hive_ambarialert.txt' overwrite into table employee_knox_hive_ambarialert;" \
+-d statusdir="/user/wa00336/employee_knox_hive_ambarialert_creation.output" \
+-L $hadoopClusterF5ConnStr/templeton/v1/hive && sleep 60;
+curl -k -u wa00336:bnhgui89 --location-trusted  -X GET -L $hadoopClusterF5ConnStr/webhdfs/v1/user/wa00336/employee_knox_hive_ambarialert_creation.output/exit?op=OPEN;
+	0
+curl -k -u wa00336:bnhgui89 --location-trusted  -X GET -L $hadoopClusterF5ConnStr/webhdfs/v1/user/wa00336/employee_knox_hive_ambarialert_creation.output/stdout?op=OPEN;
+curl -k -u wa00336:bnhgui89 --location-trusted  -X GET -L $hadoopClusterF5ConnStr/webhdfs/v1/user/wa00336/employee_knox_hive_ambarialert_creation.output/stderr?op=OPEN;
+	WARNING: Use "yarn jar" to launch YARN applications.
+	
+	Logging initialized using configuration in jar:file:/data11/hadoop/yarn/local/usercache/wa00336/filecache/9358/hive-common.jar!/hive-log4j.properties
+	Loading data to table default.employee_knox_hive_ambarialert
+	Table default.employee_knox_hive_ambarialert stats: [numFiles=1, numRows=0, totalSize=14, rawDataSize=0]
+	OK
+	Time taken: 2.06 seconds
+-----
+
+kinit wa00336
+hdfs dfs -mkdir -p /user/wa00336/;
+hdfs dfs -copyFromLocal ~/employeeHiveData.txt /user/wa00336/employee_knox_hive_ambarialert.txt;
+hadoop fs -cat /user/wa00336/employee_knox_hive_ambarialert.txt;
+
+curl -i -k --negotiate -u : --location-trusted -X DELETE -L http://hdpr05mn01.mayo.edu:50111/templeton/v1/ddl/database/default/table/employee_knox_hive_ambarialert;
+	{"database":"default","table":"employee_knox_hive_ambarialert"}w
+
+curl -i -k --negotiate -u : --location-trusted -X PUT -L -HContent-type:application/json -d  \
+'{ "comment":"Knox-Gated Hive JDBC Testing Hive Table", "columns": [{ "name": "employeeid", "type": "int" },{ "name": "firstName", "type": "string" }, { "name": "lastName", "type": "string" }], "format": { "storedAs": "textfile", "rowFormat": {"fieldsTerminatedBy": "," }} }' \
+http://hdpr05mn01.mayo.edu:50111/templeton/v1/ddl/database/default/table/employee_knox_hive_ambarialert && sleep 15;
+curl -i -k -u wa00336:bnhgui89 --location-trusted -X GET -L $hadoopClusterF5ConnStr/templeton/v1/ddl/database/default/table/employee_knox_hive_ambarialert;
+	{"columns":[{"name":"employeeid","type":"int"},{"name":"firstname","type":"string"},{"name":"lastname","type":"string"}],"database":"default","table":"employee_knox_hive_ambarialert"}w
+
+curl -i -k --negotiate -u : --location-trusted -X POST -d execute="load data inpath '/user/wa00336/employee_knox_hive_ambarialert.txt' overwrite into table employee_knox_hive_ambarialert;" \
+-d statusdir="/user/wa00336/employee_knox_hive_ambarialert_creation.output" \
+-L http://hdpr05mn01.mayo.edu:50111/templeton/v1/hive && sleep 60;
+curl -k --negotiate -u : --location-trusted  -X GET -L http://hdpr05mn01.mayo.edu:50070/webhdfs/v1/user/wa00336/employee_knox_hive_ambarialert_creation.output/exit?op=OPEN;
+	0
+curl -k --negotiate -u : --location-trusted  -X GET -L http://hdpr05mn01.mayo.edu:50070/webhdfs/v1/user/wa00336/employee_knox_hive_ambarialert_creation.output/stdout?op=OPEN;
+curl -k --negotiate -u : --location-trusted  -X GET -L http://hdpr05mn01.mayo.edu:50070/webhdfs/v1/user/wa00336/employee_knox_hive_ambarialert_creation.output/stderr?op=OPEN;
+	WARNING: Use "yarn jar" to launch YARN applications.
+	
+	Logging initialized using configuration in jar:file:/data8/hadoop/yarn/local/usercache/wa00336/filecache/29/hive-common.jar!/hive-log4j.properties
+	Loading data to table default.employee_knox_hive_ambarialert
+	Table default.employee_knox_hive_ambarialert stats: [numFiles=1, numRows=0, totalSize=14, rawDataSize=0]
+	OK
+	Time taken: 2.496 seconds
+
+-----
+curl -i -k -u wa00336:bnhgui89 --location-trusted -X DELETE -L "$hadoopClusterF5ConnStr/webhdfs/v1/user/wa00336/employee_knox_hive_ambarialert_creation.output?op=DELETE&recursive=true";
+
+3. Hive Table Query
+curl -i -k -u wa00336:bnhgui89 --location-trusted -X POST -d execute="select * from default.employee_knox_hive_ambarialert where employeeid%3D101;" \
+-d statusdir="/user/wa00336/employee_knox_hive_ambarialert_query.output" \
+-L $hadoopClusterF5ConnStr/templeton/v1/hive && sleep 45;
+curl -k -u wa00336:bnhgui89 --location-trusted  -X GET -L $hadoopClusterF5ConnStr/webhdfs/v1/user/wa00336/employee_knox_hive_ambarialert_query.output/stdout?op=OPEN; 
+	101     Joe     Smith
+
+-----
+
+kinit wa00336;
+beeline -u 'jdbc:hive2://hdpr05mn01.mayo.edu:10001/;transportMode=http;httpPath=cliservice;principal=hive/_HOST@MFAD.MFROOT.ORG' -e "select * from default.employee_knox_hive_ambarialert where employeeid=101;";
+beeline -u 'jdbc:hive2://hdpr05mn01.mayo.edu:10001/;transportMode=http;httpPath=cliservice;principal=hive/_HOST@MFAD.MFROOT.ORG' -e "select count(*) from default.employee_knox_hive_ambarialert where employeeid=101;";
+
+-----
+
+curl -i -k --negotiate -u : --location-trusted -X POST -d execute="select firstName, lastName from default.employee_knox_hive_ambarialert where employeeid%3D101;" \
+-d statusdir="/user/wa00336/employee_knox_hive_ambarialert_query.output" \
+-L http://hdpr05mn01.mayo.edu:50111/templeton/v1/hive && sleep 45;
+curl -k -u wa00336:bnhgui89 --location-trusted  -X GET -L $hadoopClusterF5ConnStr/webhdfs/v1/user/wa00336/employee_knox_hive_ambarialert_query.output/stdout?op=OPEN; 
+	Joe     Smith
+
+curl -i -k --negotiate -u : --location-trusted -X POST -d execute="select * from default.employee_knox_hive_ambarialert where employeeid%3D101;" \
+-d statusdir="/user/wa00336/employee_knox_hive_ambarialert_query.output" \
+-L http://hdpr05mn01.mayo.edu:50111/templeton/v1/hive && sleep 45;
+curl -k -u wa00336:bnhgui89 --location-trusted  -X GET -L $hadoopClusterF5ConnStr/webhdfs/v1/user/wa00336/employee_knox_hive_ambarialert_query.output/stdout?op=OPEN; 
+	101     Joe     Smith
+
+curl -i -k --negotiate -u : --location-trusted -X POST -d execute="select count(*) from default.employee_knox_hive_ambarialert;" \
+-d statusdir="/user/wa00336/employee_knox_hive_ambarialert_query.output" \
+-L http://hdpr05mn01.mayo.edu:50111/templeton/v1/hive && sleep 45;
+curl -k -u wa00336:bnhgui89 --location-trusted  -X GET -L $hadoopClusterF5ConnStr/webhdfs/v1/user/wa00336/employee_knox_hive_ambarialert_query.output/stdout?op=OPEN; 
+	1
+
+-----
+curl -i -k -u wa00336:bnhgui89 --location-trusted -X DELETE -L "$hadoopClusterF5ConnStr/webhdfs/v1/user/wa00336/employee_knox_hive_ambarialert_query.output?op=DELETE&recursive=true";
+	{"boolean":true}
+	
+	
+----------------------------------------------------------------
+Hive JDBC via Knox and F5:
+ hiveJDBCF5Url = 'jdbc:hive2://bigdata.mayo.edu' (For Dev3 + Test3 + Prod3// (Prod2: bigdataknox.mayo.edu; Dev1: bigdataknox-dev.mayo.edu)
+ 
+  httpPath = ''
+
+  if 'DEV3' in hadoopClusterName.upper():       
+       httpPath_F5 = 'hdp/DEV3/knox/hive'
+       httpPath_Knox = 'gateway/MAYOHADOOPDEV3/hive'
+  elif 'TEST3' in hadoopClusterName.upper():
+       httpPath_F5 = 'hdp/TEST3/knox/hive'
+       httpPath_Knox = 'gateway/MAYOHADOOPTEST3/hive'
+  elif 'PROD3' in hadoopClusterName.upper():
+       httpPath_F5 = 'hdp/PROD3/knox/hive'
+       httpPath_Knox = 'gateway/MAYOHADOOPPROD3/hive'
+  elif 'DEV1' in hadoopClusterName.upper():       
+       httpPath_F5 = '/gateway/MAYOHADOOPDEV1/hive'
+       httpPath_Knox = 'gateway/MAYOHADOOPDEV1/hive' 
+  elif 'PROD2' in hadoopClusterName.upper():
+       httpPath_F5 = '/gateway/MAYOHADOOPDEV1/hive'
+       httpPath_Knox = 'gateway/MAYOHADOOPPROD2/hive'            
+         
+       
+*** hiveConnectionURL: jdbc:hive2://hdpr05en01.mayo.edu:8442/default;ssl=true;transportMode=http;httpPath=gateway/MAYOHADOOPDEV3/hive;user=wa00336;password=bnhgui89
+*** hiveConnectionURL: jdbc:hive2://bigdata.mayo.edu:443/default;ssl=true;transportMode=http;httpPath=hdp/DEV3/knox/hive;user=wa00336;password=bnhgui89
+
+
+## Dev1
+ beeline -u 'jdbc:hive2://hdpr03mn01.mayo.edu:10001/;transportMode=http;httpPath=cliservice;principal=hive/_HOST@MFAD.MFROOT.ORG' -e "select count(1) from employee_hivejdbc_knox1";
+ beeline -u 'jdbc:hive2://hdpr01kx01.mayo.edu:8442/default;ssl=true;transportMode=http;httpPath=gateway/MAYOHADOOPDEV1/hive wa00336 bnhgui89' -e 'select count(1) from employee_hivejdbc_knox1'
+ beeline -u 'jdbc:hive2://bigdataknox-dev.mayo.edu/default;ssl=true;transportMode=http;httpPath=gateway/MAYOHADOOPDEV1/hive wa00336 bnhgui89' -e 'select count(1) from employee_hivejdbc_knox1'
+	### ";user=" --> " "
+	### ";password=" ---> " "
+	
+## Prod2
+ beeline --silent=true --showWarnings=false -u 'jdbc:hive2://hdpr02mn01.mayo.edu:10001/;transportMode=http;httpPath=cliservice;principal=hive/_HOST@MFAD.MFROOT.ORG' -e "select count(1) from employee_hivejdbc_knox1";
+ beeline --silent=true --showWarnings=false -u 'jdbc:hive2://hdpr01kx03.mayo.edu:8442/default;ssl=true;transportMode=http;httpPath=gateway/MAYOHADOOPPROD2/hive wa00336 bnhgui89' -e 'select count(1) from employee_hivejdbc_knox1'
+ beeline --silent=true --showWarnings=false -u 'jdbc:hive2://bigdataknox.mayo.edu/default;ssl=true;transportMode=http;httpPath=gateway/MAYOHADOOPPROD2/hive wa00336 bnhgui89' -e 'select count(1) from employee_hivejdbc_knox1'
+
+## Dev3	
+ beeline -u 'jdbc:hive2://hdpr05mn01.mayo.edu:10001/;transportMode=http;httpPath=cliservice;principal=hive/_HOST@MFAD.MFROOT.ORG' -e "select count(1) from employee_hivejdbc_knox1";
+ beeline -u 'jdbc:hive2://hdpr05en01.mayo.edu:8442/default;ssl=true;transportMode=http;httpPath=gateway/MAYOHADOOPDEV3/hive wa00336 bnhgui89' -e 'select count(1) from employee_hivejdbc_knox1'
+ beeline -u 'jdbc:hive2://bigdata.mayo.edu/default;ssl=true;transportMode=http;httpPath=hdp/DEV3/knox/hive wa00336 bnhgui89' -e 'select count(1) from employee_hivejdbc_knox1'
+
+
+	

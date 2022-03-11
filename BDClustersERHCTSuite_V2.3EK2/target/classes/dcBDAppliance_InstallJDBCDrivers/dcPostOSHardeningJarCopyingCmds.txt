@@ -1,0 +1,15 @@
+on MN02 etc:
+cd /usr/hdp/2.3.4.0-3485/sqoop/lib;
+ls -la;
+
+BDDev:
+scp db2jcc4.jar root@hdpr03mn01:/usr/hdp/2.3.4.0-3485/sqoop/lib/;
+scp ojdbc6.jar root@hdpr03mn01:/usr/hdp/2.3.4.0-3485/sqoop/lib/;
+scp sqljdbc4.jar root@hdpr03mn01:/usr/hdp/2.3.4.0-3485/sqoop/lib/;
+scp postgresql-8.2-512.jdbc4.jar root@hdpr03mn01:/usr/hdp/2.3.4.0-3485/sqoop/lib/;
+
+BDSdbx:
+scp db2jcc4.jar root@hdpr04mn01:/usr/hdp/2.3.4.0-3485/sqoop/lib/;
+scp ojdbc6.jar root@hdpr04mn01:/usr/hdp/2.3.4.0-3485/sqoop/lib/;
+scp sqljdbc4.jar root@hdpr04mn01:/usr/hdp/2.3.4.0-3485/sqoop/lib/;
+scp postgresql-8.2-512.jdbc4.jar root@hdpr04mn01:/usr/hdp/2.3.4.0-3485/sqoop/lib/;

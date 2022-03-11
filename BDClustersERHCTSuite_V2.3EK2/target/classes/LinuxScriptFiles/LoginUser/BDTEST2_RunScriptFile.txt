@@ -1,0 +1,5 @@
+cd /data/home/wa00336/test/;
+echo -ne "'Current pwd' is: ";
+pwd;
+./dcTestHive_ManagedTableScriptFile_No22.sh;
+sleep 1;

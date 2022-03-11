@@ -1,0 +1,104 @@
+en07
+en08
+en09
+en10
+en11
+	
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////
+1. public static void moveHdfsFolderOrFile (String srcClusterName, String srcFolderOrFileFullPathAndName, String destClusterName, String destFolderFullPathAndName)
+	
+2. public static void copyHdfsFolderOrFile (String srcClusterName, String srcFolderOrFileFullPathAndName, String destClusterName, String destFolderOrFileFullPathAndName)
+	
+3. public static ArrayList<String>  obtainHdfsFolder_FileList_4AFileType (String hdfsFileNameIndicator, ArrayList<String> currHdfsFolder_AllSubFolderAndFilePathNameList)
+		
+4. public static void mergeHdfsSrcParentFolder_EachSubFolderFiles_IntoOneDestFile (ArrayList<String> srcSubFolderList, String srcParentFolderName,String destHdfsFolderName, String tempHdfsFileMergingScriptFilePathAndName,String localScriptFilesFolder, String enServerSqoopScriptFileDirectory, ULServerCommandFactory bdENCommFactory)
+		
+5. public static void copyHdfsSrcParentFolder_EachSubFolderFile_IntoOneDestFile (ArrayList<String> srcSubFolderList, String srcParentFolderName,String destHdfsFolderName, String tempHdfsFileMergingScriptFilePathAndName,String localScriptFilesFolder, String enServerSqoopScriptFileDirectory, ULServerCommandFactory bdENCommFactory)
+		
+6. public static void mergeSingleHdfsSrcFolder_AllFiles_IntoOneDestFile (String srcHdfsFolderName, String destHdfsFolderName, int destFileNumber, String tempHdfsFileMergingScriptFilePathAndName,	String localScriptFilesFolder, String enServerSqoopScriptFileDirectory, ULServerCommandFactory bdENCommFactory)
+	
+7. public static void generateSingleHdfsSrcFolderFiles_MergingScriptFile(String srcHdfsFolderName, String destHdfsFolderName, int destFileNumber, String tempHdfsFileMergingScriptFilePathAndName)
+			
+8. public static void generateHdfsSrcParentFolder_ChildSubFolderFiles_MergingScriptFile(ArrayList<String> tempParentFolder_ChildLevelSubFolderList, String srcParentFolderName, String destHdfsFolderName, String tempHdfsFileMergingScriptFilePathAndName)
+		
+9. public static void generateSingleHdfsSrcFolder_ChildSubFolderSingleFile_CopyingScriptFile(ArrayList<String> tempParentFolder_ChildLevelSubFolderList, String srcParentFolderName, String destHdfsFolderName, String tempHdfsFileMergingScriptFilePathAndName)
+	
+10. public static int runScriptFile_OnBDCluster (String localScriptFileFullPathAndName, String localScriptFilesFolder, String enServerScriptFileDirectory, ULServerCommandFactory bdENCommFactory)
+	
+11. public static int changeScriptFile_OwnershipTohdfs_OnEntryNodeLocal_OnBDCluster (String enServerScriptFilePathAndName,ULServerCommandFactory bdENCommFactory)
+				
+12. public static int activateScriptFile_OnEntryNodeLocal_OnBDCluster (String enServerScriptFilePathAndName, ULServerCommandFactory bdENCommFactory)
+		
+13. public static int copyFile_FromWindowsLocal_ToHDFS_OnBDCluster (String fileName, String localFilesFolder, String enServerFileDirectory, String hdfsFilePathAndName, ULServerCommandFactory bdENCommFactory)
+        	
+14. public static int removeFile_FromEntryNodeLocal_OnBDCluster (String enServerFilePathAndName, ULServerCommandFactory bdENCommFactory)        
+	
+15. public static int copyFile_FromEntryNodeLocal_ToHdfs_OnBDCluster (String enServerFilePathAndName, String hdfsFilePathAndName, ULServerCommandFactory bdENCommFactory)
+                		
+16. *private static int removeFile_FromHDFS_OnBDCluster (String hdfsFilePathAndName,	ULServerCommandFactory bdENCommFactory)
+
+17. public static int copyFile_FromWindowsLocal_ToEntryNodeLocal_OnBDCluster (String fileName, String localFilesFolder, String enServerFileDirectory, ULServerCommandFactory bdENCommFactory)
+			
+18. public static ArrayList<String> findLinesInAFile_OnEntryNodeLocal_OnBDCluster (String enServerFilePathAndName, String searchStringPattern, String grepStr, ULServerCommandFactory bdENCommFactory, String tempLocalWorkignFileAndPathName)
+
+19. public static ArrayList<String> findFileList_OnEntryNodeLocal_OnBDCluster (String enServerFileDirectory, String fileNamePattern, String grepStr, ULServerCommandFactory bdENCommFactory, String tempLocalWorkignFileAndPathName)
+			
+20. public static void copyFile_ToWindowsLocal_AndDeleteFile_FromEntryNodeLocal_OnBDCluster (String enFilePathAndName,String localTargetFilePathAndName, ULServerCommandFactory bdENCommFactory)
+	
+21. public static void copyFile_ToWindowsLocal_FromEntryNodeLocal_OnBDCluster (String enFilePathAndName,String localTargetFilePathAndName, ULServerCommandFactory bdENCommFactory)
+
+22. public static int safelyCreateAFolder_OnEntryNodeLocal_OnBDCluster (String enServerFileDirectory, ULServerCommandFactory bdENCommFactory)
+	
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+public static void downloadHdfsFileMessagesCountsFile_FromServer (String enServerHdfsFileCountsFileName, String localHdfsFileMsgCountRecordFilePathAndName, ULServerCommandFactory bdENCommFactory)	
+
+public static void downloadDelete_HdfsFileMessagesCountsFile_FromServer (String enServerHdfsFileCountsFileName, String localHdfsFileMsgCountRecordFilePathAndName, ULServerCommandFactory bdENCommFactory)
+	
+public static int downloadMessagesCountsInSingleFolder_AllHdfsFiles_FromServer (String hdfsFileMsgCountRecordFilePathAndName, String enServerHdfsFileCountsFileName, ULServerCommandFactory bdENCommFactory)
+	
+public static void generateMessageCountingScriptFile_Grep (ArrayList<String> currParentFolderHdfsFileList, String msgIndicator, String tempLocalCountingScriptFileAndPathName, String enServerHdfsFileCountsFileName) 
+	
+
+public static void generateMessageCountingScriptFile (ArrayList<String> currFolderHdfsFileList, String serverRunMsgCountingScriptCmdCore, String tableIndicator, String localCountingScriptFileAndPathName) 
+	
+	
+///////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+public static ArrayList<String>  obtainHdfsFolder_ChildLevelSubFolderList (String hdfsFolderPathAndName, ArrayList<String> currHdfsFolder_AllSubFolderAndFilePathNameList)
+	
+public static long  obtainHdfsFolderOrFileSizeInBytes(String hdfsFolderPathAndName, String tempLocalWorkignFileAndPathName, String bdClusterName)
+	
+public static ArrayList<String>  obtainHdfsFolder_AllSubFolderAndFileList(String hdfsFolderPathAndName, String tempLocalWorkignFileAndPathName, String bdClusterName)
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////
+public static ArrayList<String>  obtainLinuxFolder_ChildlevelSymLinkList(String linuxFolderPathAndName,	String tempLocalWorkignFileAndPathName, ULServerCommandFactory bdENCommFactory)
+
+public static ArrayList<String>  obtainLinuxFolder_ChildlevelFilePathNameList(String linuxFolderPathAndName, String tempLocalWorkignFileAndPathName, ULServerCommandFactory bdENCommFactory)
+
+public static ArrayList<String>  obtainLinuxFolder_SubFolderList(String linuxFolderPathAndName,	String tempLocalWorkignFileAndPathName, ULServerCommandFactory bdENCommFactory)
+
+public static ArrayList<String>  obtainLinuxFolder_AllLevelsFilePathNameList(String linuxFolderPathAndName,	String tempLocalWorkignFileAndPathName, ULServerCommandFactory bdENCommFactory)
+
+public static ArrayList<String>  obtainLinuxFolder_AllLevelsSymLinkList(String linuxFolderPathAndName, String tempLocalWorkignFileAndPathName, ULServerCommandFactory bdENCommFactory)
+
+public static ArrayList<String>  obtainLinuxFolder_AllLevels_SymLink_FilePathNameList(String linuxFolderPathAndName,String tempLocalWorkignFileAndPathName, ULServerCommandFactory bdENCommFactory)
+
+public static int copyFolder_FromEntryNodeLocal_ToHdfs_OnBDCluster(String linuxFolderPathAndName, String tempLocalWorkignFileAndPathName, String hdfsParentFolderName, ULServerCommandFactory bdENCommFactory)			
+	
+////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+public static ArrayList<String> getSortedDuplicatesFreeArrayList (ArrayList<String> currArrayList)
+
+private static void prepareFile_DeleteOld (String localFilePathAndName, String fileNoticeInfo)
+
+private static void prepareFile (String localFilePathAndName, String fileNoticeInfo)
+	
+private static int executePuttyCommandOnLocalMachine (String fullPuttyCmd) 
+	
+
+
+

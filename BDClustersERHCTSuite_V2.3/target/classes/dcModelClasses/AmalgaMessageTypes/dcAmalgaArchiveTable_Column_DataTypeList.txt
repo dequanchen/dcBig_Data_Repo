@@ -1,0 +1,8 @@
+MsgID.uniqueidentifier(16)
+MsgDtTmPosted.datetime(8)
+MsgType.nvarchar(100)
+MsgInfo.nvarchar(400)
+UTCDT.datetime(8)
+SeqNO.bigint(8)
+MsgData.image(16)
+ArchiveFlag.tinyint(1)

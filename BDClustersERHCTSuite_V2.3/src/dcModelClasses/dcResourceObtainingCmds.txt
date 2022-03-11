@@ -1,0 +1,44 @@
+(on MN01) (sudo su - root)
+cp /etc/security/keytabs/hdfs.headless.keytab /data/home/m041785/;
+cp /etc/security/keytabs/smokeuser.headless.keytab /data/home/m041785/;
+cp /etc/security/keytabs/storm.headless.keytab /data/home/m041785/;
+cp /etc/security/keytabs/hbase.headless.keytab /data/home/m041785/;
+
+cp /etc/krb5.conf /data/home/m041785/;
+chown m041785:users -R /data/home/m041785/;
+
+Configure Test Suite - Modify 7 (HBase, Hdfs, Sqoop, ULServerCommandFactory, 
+                             BdCluster, BdNode, HiveViaKnoxConnectionFactory) + (ConfigureULWResources)
+                             2 (C1_dcTestFlume_StoringData.obtainLocalHdfsKeytabFileName, 
+                                C3_dcTestStorm_UsingFlumeAndES) .java files for a Hadoop Cluster
+
+Configure Ranger Policy 
+(BDProd2: https://hdpr02mn02.mayo.edu:6182/index.html#!/policymanager)
+add bdadmin and bdsupportedadmins to the Admin group for HDFS, HBASE, HIVE, YARN, KNOX, STORM, and KAFKA policies (No policy for SOLR at present).
+Note: For knox controlled WebHBase to work, just adding the group without adding the user - m041785 to the users for admin and all permissions will results in a failure.
+
+JDBC Drivers for KN0X03 and KNOX04 etc:
+on BDProd2 MN01 (sudo su - root): 
+
+scp /usr/hdp/2.3.4.0-3485/sqoop/lib/db2jcc4.jar  root@hdpr01kx03.mayo.edu://usr/hdp/2.3.4.0-3485/sqoop/lib/;
+scp /usr/hdp/2.3.4.0-3485/sqoop/lib/ojdbc6.jar  root@hdpr01kx03.mayo.edu://usr/hdp/2.3.4.0-3485/sqoop/lib/;
+scp /usr/hdp/2.3.4.0-3485/sqoop/lib/sqljdbc4.jar  root@hdpr01kx03.mayo.edu://usr/hdp/2.3.4.0-3485/sqoop/lib/;
+scp /usr/hdp/2.3.4.0-3485/sqoop/lib/postgresql-8.2-512.jdbc4.jar  root@hdpr01kx03.mayo.edu://usr/hdp/2.3.4.0-3485/sqoop/lib/;
+
+scp /usr/hdp/2.3.4.0-3485/sqoop/lib/db2jcc4.jar  root@hdpr01kx04.mayo.edu://usr/hdp/2.3.4.0-3485/sqoop/lib/;
+scp /usr/hdp/2.3.4.0-3485/sqoop/lib/ojdbc6.jar  root@hdpr01kx04.mayo.edu://usr/hdp/2.3.4.0-3485/sqoop/lib/;
+scp /usr/hdp/2.3.4.0-3485/sqoop/lib/sqljdbc4.jar  root@hdpr01kx04.mayo.edu://usr/hdp/2.3.4.0-3485/sqoop/lib/;
+scp /usr/hdp/2.3.4.0-3485/sqoop/lib/postgresql-8.2-512.jdbc4.jar  root@hdpr01kx04.mayo.edu://usr/hdp/2.3.4.0-3485/sqoop/lib/;
+
+
+generate truststore .jks files for Knox01-Knox04 for Knox-controlled Hive JDBC
+
+
+Configure Storm on all entry nodes (en.. mn.. kx..) for a cluster for non-root user & create symbolic linc on all entry nodes for the
+   test user - m041785 (ln -s /data/home/.storm /data/home/m041785/.storm):
+	C:\Users\m041785\Desktop\dcBigData_Records\dcBigDataLearning&Work\Appliances\SOPs\dcSOP_v2a_StormConfig4NonRootUser.txt
+	
+Configure Kafka on all entry nodes (en.. mn.. kx..) for a cluster for non-root user & create symbolic linc on all entry nodes for the
+   test user - m041785 ():
+	C:\Users\m041785\Desktop\dcBigData_Records\dcBigDataLearning&Work\Appliances\SOPs\dcSOP_KafkaConfig4NonRootUser.txt	
+   (Note: On Ambari UI: change delete.topic.enable==false ==> delete.topic.enable==true  & restart KAFKA from ambari UI)

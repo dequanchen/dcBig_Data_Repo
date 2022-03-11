@@ -1,0 +1,39 @@
+mkdir -p /home/hdfs;
+chmod -R 777 /home/hdfs;
+chown -R hdfs:users /home/hdfs;
+mkdir -p /data/tmp;
+chmod -R 777 /data/tmp;
+chown -R hdfs:users /data/tmp;
+
+chmod -R 750 /home/hdfs;
+chmod -R 750 /data/tmp;
+
+.tmp to /user/m041785/test/Flume/dcFSETestData.
+.tmp to /user/m041785/test/Flume/dcFlumeTestData.
+.tmp to /user/m041785/test/Flume/dcFlumeTestData.1459138431172
+
+------------------
+"hadoop fs -rm -r -skipTrash " + w
+"hadoop fs -rm -r -skipTrash " + activeNN_addr_port + w
+
+"hadoop fs -mkdir -p " + knoxTestFolderName 
+"hadoop fs -mkdir -p " + activeNN_addr_port + knoxTestFolderName 
+
+"hadoop fs -chown -R " + loginUserName + ":bdadmin " + knoxTestFolderName 
+"hadoop fs -chown -R " + loginUserName + ":bdadmin " + activeNN_addr_port + knoxTestFolderName 
+
+"hadoop fs -chown -R " + loginUserName + ":hdfs " + knoxTestFolderName
+"hadoop fs -chown -R " + loginUserName + ":hdfs " + activeNN_addr_port + knoxTestFolderName
+
+"hadoop fs -chmod -R 777 " + knoxTestFolderName 
+"hadoop fs -chmod -R 777 " + activeNN_addr_port + knoxTestFolderName 
+
+"hadoop fs -chmod -R 750 " + knoxTestFolderName
+"hadoop fs -chmod -R 750 " + activeNN_addr_port + knoxTestFolderName
+
+"hadoop fs -chmod -R 550 " + knoxTestFolderName
+"hadoop fs -chmod -R 550 " + activeNN_addr_port + knoxTestFolderName
+
+"hadoop fs -copyFromLocal " + ... + " " + ...
+
+"hadoop fs -copyFromLocal " + ... + " " + activeNN_addr_port + ...
