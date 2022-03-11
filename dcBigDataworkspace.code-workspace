@@ -1,0 +1,194 @@
+{
+	"folders": [
+		{
+			"path": "."
+		},
+		{
+			"path": "H:\\dcBigDataWorkSpace\\.metadata"
+		},
+		{
+			"path": "H:\\dcBigDataWorkSpace\\.recommenders"
+		},
+		{
+			"path": "H:\\dcBigDataWorkSpace\\BD_HDFS_ConcV"
+		},
+		{
+			"path": "H:\\dcBigDataWorkSpace\\BD_HDFS_ConcV_ES"
+		},
+		{
+			"path": "H:\\dcBigDataWorkSpace\\BD_HDFS_ConcV_old"
+		},
+		{
+			"path": "H:\\dcBigDataWorkSpace\\BD_HDFS_ConcV_V2.3EK2"
+		},
+		{
+			"path": "H:\\dcBigDataWorkSpace\\BD_HDFS_ConcV_V2.3EK2_Win"
+		},
+		{
+			"path": "H:\\dcBigDataWorkSpace\\BD_HDFS_Fix_ES"
+		},
+		{
+			"path": "H:\\dcBigDataWorkSpace\\BD_MCHadoop"
+		},
+		{
+			"path": "H:\\dcBigDataWorkSpace\\BD_MCHadoop_InterClusterDataBkp_1"
+		},
+		{
+			"path": "H:\\dcBigDataWorkSpace\\BD_MCHadoop_InterClusterDataMigrationBkp"
+		},
+		{
+			"path": "H:\\dcBigDataWorkSpace\\BDApplianceERHCTSuite_2.1k"
+		},
+		{
+			"path": "H:\\dcBigDataWorkSpace\\BDApplianceERHCTSuite_2.1LK"
+		},
+		{
+			"path": "H:\\dcBigDataWorkSpace\\BDAppliancesERHCTSuite_V2.1"
+		},
+		{
+			"path": "H:\\dcBigDataWorkSpace\\BDAppliancesUATSuite"
+		},
+		{
+			"path": "H:\\dcBigDataWorkSpace\\BDAppliancesUATSuite_V2.1"
+		},
+		{
+			"path": "H:\\dcBigDataWorkSpace\\BDAppliancesUtilities"
+		},
+		{
+			"path": "H:\\dcBigDataWorkSpace\\BDCleanUp"
+		},
+		{
+			"path": "H:\\dcBigDataWorkSpace\\BDClustersERHCTSuite_V2.3"
+		},
+		{
+			"path": "H:\\dcBigDataWorkSpace\\BDClustersERHCTSuite_V2.3EK"
+		},
+		{
+			"path": "H:\\dcBigDataWorkSpace\\BDClustersERHCTSuite_V2.3EK2"
+		},
+		{
+			"path": "H:\\dcBigDataWorkSpace\\BDClustersERHCTSuite_VEKS"
+		},
+		{
+			"path": "H:\\dcBigDataWorkSpace\\BDConfiguration"
+		},
+		{
+			"path": "H:\\dcBigDataWorkSpace\\BDDevCodeTrials_DropWizard"
+		},
+		{
+			"path": "H:\\dcBigDataWorkSpace\\BDProd1DataBackup"
+		},
+		{
+			"path": "H:\\dcBigDataWorkSpace\\BDScripts"
+		},
+		{
+			"path": "H:\\dcBigDataWorkSpace\\BDTS-Cluster_Dashboard_debug"
+		},
+		{
+			"path": "H:\\dcBigDataWorkSpace\\BenchMarks"
+		},
+		{
+			"path": "H:\\dcBigDataWorkSpace\\BigDataCommons"
+		},
+		{
+			"path": "H:\\dcBigDataWorkSpace\\dcBigDataUtilityTool"
+		},
+		{
+			"path": "H:\\dcBigDataWorkSpace\\DCClusterERHCTSuite_EKS"
+		},
+		{
+			"path": "H:\\dcBigDataWorkSpace\\dcEDT_AmalgaDBAnalysis"
+		},
+		{
+			"path": "H:\\dcBigDataWorkSpace\\dcEDTDBS_HDFS_DataExtraction"
+		},
+		{
+			"path": "H:\\dcBigDataWorkSpace\\dcHBase_Phonix"
+		},
+		{
+			"path": "H:\\dcBigDataWorkSpace\\dcMayoStorm_sprint12a"
+		},
+		{
+			"path": "H:\\dcBigDataWorkSpace\\DCPythonProject"
+		},
+		{
+			"path": "H:\\dcBigDataWorkSpace\\dcStorm"
+		},
+		{
+			"path": "H:\\dcBigDataWorkSpace\\DequanTest"
+		},
+		{
+			"path": "H:\\dcBigDataWorkSpace\\DequanTest_JavaSpark"
+		},
+		{
+			"path": "H:\\dcBigDataWorkSpace\\DequanTest_ScalaSpark"
+		},
+		{
+			"path": "H:\\dcBigDataWorkSpace\\Drainer"
+		},
+		{
+			"path": "H:\\dcBigDataWorkSpace\\Drainer_Int"
+		},
+		{
+			"path": "H:\\dcBigDataWorkSpace\\Drainer_Prod"
+		},
+		{
+			"path": "H:\\dcBigDataWorkSpace\\FHIRGenerator"
+		},
+		{
+			"path": "H:\\dcBigDataWorkSpace\\gateway-provider-security-shiro"
+		},
+		{
+			"path": "H:\\dcBigDataWorkSpace\\gateway-server"
+		},
+		{
+			"path": "H:\\dcBigDataWorkSpace\\gateway-shell"
+		},
+		{
+			"path": "H:\\dcBigDataWorkSpace\\Hbase"
+		},
+		{
+			"path": "H:\\dcBigDataWorkSpace\\HdfsMessages"
+		},
+		{
+			"path": "H:\\dcBigDataWorkSpace\\knox"
+		},
+		{
+			"path": "H:\\dcBigDataWorkSpace\\MADSTopology"
+		},
+		{
+			"path": "H:\\dcBigDataWorkSpace\\MayoES"
+		},
+		{
+			"path": "H:\\dcBigDataWorkSpace\\MayoStorm"
+		},
+		{
+			"path": "H:\\dcBigDataWorkSpace\\MayoStorm_Drainer"
+		},
+		{
+			"path": "H:\\dcBigDataWorkSpace\\MayoStorm_V1"
+		},
+		{
+			"path": "H:\\dcBigDataWorkSpace\\RemoteSystemsTempFiles"
+		},
+		{
+			"path": "H:\\dcBigDataWorkSpace\\ReplayMessages"
+		},
+		{
+			"path": "H:\\dcBigDataWorkSpace\\resources"
+		},
+		{
+			"path": "H:\\dcBigDataWorkSpace\\SampleBigData"
+		},
+		{
+			"path": "H:\\dcBigDataWorkSpace\\SparkScala"
+		},
+		{
+			"path": "H:\\dcBigDataWorkSpace\\StormSample"
+		},
+		{
+			"path": "H:\\dcBigDataWorkSpace\\WordCount"
+		}
+	],
+	"settings": {}
+}
