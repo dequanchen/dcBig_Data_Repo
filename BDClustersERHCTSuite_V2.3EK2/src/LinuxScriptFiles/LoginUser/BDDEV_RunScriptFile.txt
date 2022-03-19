@@ -1,5 +1,0 @@
-cd /data/home/m041785/test/;
-echo -ne "'Current pwd' is: ";
-pwd;
-./dcTestES_IndexingAndSearchingScriptFile_No1.sh;
-sleep 1;

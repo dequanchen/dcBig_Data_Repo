@@ -1,5 +1,0 @@
-cd /data/home/wa00336/test/;
-echo -ne "'Current pwd' is: ";
-pwd;
-./dcTestKnox_WebHcatScriptFile_Curl_F5Balancer1.sh;
-sleep 1;

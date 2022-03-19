@@ -1,4 +1,0 @@
-sudo su - hdfs <<HERE
-hadoop fs -rm -skipTrash /data/test/dcUatDataFile_No3;
-sleep 1;
-HERE

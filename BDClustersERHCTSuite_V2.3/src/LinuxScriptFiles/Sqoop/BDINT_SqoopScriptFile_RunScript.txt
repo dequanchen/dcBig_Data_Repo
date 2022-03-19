@@ -1,7 +1,0 @@
-sudo su - hdfs <<HERE
-cd /home/hdfs;
-echo -ne "'Current pwd' is: ";
-pwd;
-.//home/hdfs/dcTestSqoop_EcgDataImportingScriptFile_No3.sh;
-sleep 1;
-HERE
